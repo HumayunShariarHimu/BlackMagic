@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ব্ল্যাক ম্যাজিক: শিক্ষা এবং নিরাপদ অনুশীলন — Humayun Shariar Himu</title>
+  <style>
+    :root{
+      --bg-1: #04040a;
+      --bg-2: #08101a;
+      --card: rgba(255,255,255,0.03);
+      --muted: #98a4b1;
+      --accent:#8b5cf6;
+      --accent-2:#06b6d4;
+      --text:#e8f0ff;
+      --danger:#ff7b7b;
+      --glass: rgba(255,255,255,0.02);
+    }
+    *{box-sizing:border-box;}
+    html,body{height:100%;margin:0;padding:0;}
+    body{font-family:'Noto Sans Bengali', Inter, system-ui, -apple-system, Roboto, sans-serif;
+      background:var(--bg-1);color:var(--text);display:flex;justify-content:center;padding:12px;align-items:flex-start;-webkit-font-smoothing:antialiased;}
+
+    .app{width:100%;max-width:980px;position:relative;z-index:1;}
+
+    /* Mystical background */
+    .scene{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+    .nebula{
+      position:absolute;left:50%;top:30%;width:140vw;height:100vh;transform:translateX(-50%) translateY(-10%);
+      background:
+        radial-gradient(40% 30% at 10% 20%, rgba(139,92,246,0.18), transparent 15%),
+        radial-gradient(30% 25% at 80% 30%, rgba(6,182,212,0.12), transparent 12%),
+        radial-gradient(50% 40% at 50% 80%, rgba(99,102,241,0.08), transparent 18%),
+        radial-gradient(20% 12% at 30% 60%, rgba(255,255,255,0.02), transparent 5%);
+      filter: blur(30px) saturate(120%);mix-blend-mode: screen;opacity:0.95;animation: drift 18s linear infinite;
+    }
+    .glow-orb{position:absolute;border-radius:999px;filter:blur(18px);opacity:0.8;mix-blend-mode:screen;animation: floaty 10s ease-in-out infinite;}
+    .orb-1{width:260px;height:260px;background:radial-gradient(circle at 30% 30%, rgba(139,92,246,0.22), rgba(139,92,246,0.06));left:8%;top:10%;}
+    .orb-2{width:200px;height:200px;background:radial-gradient(circle at 60% 40%, rgba(6,182,212,0.18), rgba(6,182,212,0.04));right:6%;top:18%;animation-duration:14s}
+    .orb-3{width:160px;height:160px;background:radial-gradient(circle at 40% 50%, rgba(255,255,255,0.06), transparent);left:45%;top:70%;animation-duration:22s}
+
+    @keyframes drift{0%{transform:translateX(-50%) translateY(-12%)}50%{transform:translateX(-52%) translateY(-8%)}100%{transform:translateX(-50%) translateY(-12%)}}
+    @keyframes floaty{0%{transform:translateY(-6px)}50%{transform:translateY(6px)}100%{transform:translateY(-6px)}}
+
+    /* Layout */
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;position:relative;z-index:2;flex-wrap:wrap;}
+    .logo h1{font-size:18px;margin:0;}
+    .subtitle{color:var(--muted);font-size:13px;flex-basis:100%;}
+    nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
+    .nav-button{display:block;padding:10px 14px;border-radius:10px;border:1px solid transparent;
+      background:transparent;cursor:pointer;font-weight:700;color:var(--text);font-size:14px;}
+    .nav-button.active{background:linear-gradient(90deg, rgba(139,92,246,0.12), rgba(6,182,212,0.06));
+      box-shadow:0 6px 18px rgba(124,58,237,0.12), inset 0 1px 0 rgba(255,255,255,0.02);}
+    .nav-button:active{transform:translateY(1px);}
+    
+    .layout{display:grid;grid-template-columns:1fr;gap:16px;position:relative;z-index:2;}
+    .main{background:linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.28));
+      border:1px solid rgba(255,255,255,0.02);border-radius:14px;padding:18px;min-height:520px;}
+
+    /* Buttons & controls */
+    .search input{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);
+      background:rgba(255,255,255,0.02);color:var(--text);font-size:15px;margin-top:12px;}
+    .card{background:transparent;border-radius:10px;padding:10px;margin-bottom:12px;}
+    .small{font-size:13px;color:var(--muted);}
+    h2{margin-top:0;color:var(--text);font-size:18px;}
+    p, li{color:var(--text);line-height:1.5;}
+    ul, ol{padding-left:18px;}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:0;cursor:pointer;font-weight:700;}
+    .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));box-shadow:0 8px 30px rgba(139,92,246,0.18);color:white;}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--text);}
+    footer.app-footer {
+  margin-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.02);
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+}
+
+footer.app-footer .copyright,
+footer.app-footer .small {
+  width: 100%;
+}
+
+    /* Mobile responsive */
+    @media(max-width:480px){
+      .logo h1{font-size:16px;}
+      .nav-button{padding:10px 12px;font-size:13px;border-radius:10px;}
+      .main{padding:14px;}
+      .orb-1,.orb-2,.orb-3{opacity:0.6;}
+    }
+
+    /* Mystic text */
+    .mystic-title{font-weight:800;letter-spacing:0.2px;display:inline-block;animation: pulse 3s ease-in-out infinite;}
+    @keyframes pulse{0%{text-shadow:0 0 0 rgba(139,92,246,0.0)}50%{text-shadow:0 0 28px rgba(139,92,246,0.18),0 0 6px rgba(6,182,212,0.06)}100%{text-shadow:0 0 0 rgba(139,92,246,0.0);}}
+  </style>
+</head>
+<body>
+  <div class="scene" aria-hidden="true">
+    <div class="nebula"></div>
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+  </div>
+
+  <div class="app" role="application">
+    <header>
+      <div class="logo">
+        <h1><span class="mystic-title">ব্ল্যাক ম্যাজিক</span> — শিক্ষা ও নিরাপদ অনুশীলন</h1>
+        <div class="subtitle">ধর্মীয়, সাংস্কৃতিক ও মনস্তাত্ত্বিক দিকসমূহ</div>
+      </div>
+      <nav>
+        <button class="nav-button active" data-view="overview">সারাংশ</button>
+        <button class="nav-button" data-view="religions">ধর্মীয় দৃষ্টিভঙ্গি</button>
+        <button class="nav-button" data-view="psychology">মনোবিজ্ঞান</button>
+        <button class="nav-button" data-view="practices">নিরাপদ অনুশীলন</button>
+        <button class="nav-button" data-view="protocols">৭-দিন প্রটোকল</button>
+        <button class="nav-button" data-view="resources">রিসোর্স & রেফারেন্স</button>
+      </nav>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <button id="openSafety" class="btn btn-ghost" aria-expanded="false">Safety</button>
+        <button id="toggleTheme" class="btn btn-primary">Light</button>
+      </div>
+    </header>
+
+    <main class="main" id="mainContent">
+  <!-- Dynamic content -->
+
+  <!-- Overview -->
+  <section id="overview">
+    <h2>কী — সংজ্ঞা ও লক্ষ্য</h2>
+<p><strong>ব্ল্যাক ম্যাজিক বা কালো জাদু:</strong> এটি এমন একটি অনুশীলন, আচার বা রহস্যময় প্রথা যা সাধারণত কারও ওপর প্রভাব বিস্তার, নিয়ন্ত্রণ বা ক্ষতি করার উদ্দেশ্যে করা হতে পারে। প্রাচীনকাল থেকে বিভিন্ন সভ্যতায় এ ধরনের আচার বিদ্যমান। প্রথাগত বিশ্বাস অনুসারে, ব্ল্যাক ম্যাজিকের মাধ্যমে মানুষ অন্যের মনের অবস্থা, স্বাস্থ্য, বা জীবনধারায় প্রভাব ফেলতে চেয়েছে।</p>
+
+<h3>ইতিহাস ও সাংস্কৃতিক প্রেক্ষাপট</h3>
+<ul>
+  <li>প্রাচীন মেসোপটেমিয়া, মিশর ও ভারতীয় উপমহাদেশে জাদু এবং আচার প্রমাণিত।</li>
+  <li>ইউরোপে মধ্যযুগে মানুষকে ভয় দেখিয়ে ক্ষমতা বা সম্পদ নিয়ন্ত্রণের জন্য ব্ল্যাক ম্যাজিক ব্যবহৃত হতো।</li>
+  <li>লোকবিশ্বাস ও সংস্কৃতি অনুযায়ী, টোটকা, যন্ত্র বা প্রতীকী নানান উপাদান দিয়ে কার্যকরী প্রভাব তৈরি করার চেষ্টা করা হত।</li>
+</ul>
+
+<h3>প্রকারভেদ</h3>
+<ul>
+  <li><strong>ক্ষতিকর উদ্দেশ্যবাহী (Malefic):</strong> কারও ক্ষতি বা দুঃখ তৈরি করার জন্য ব্যবহৃত আচার।</li>
+  <li><strong>নিরাপদ বা শিক্ষামূলক (Symbolic/Protective):</strong> মানসিক ফোকাস, আত্ম-উন্নয়ন বা সুরক্ষার জন্য ব্যবহৃত প্রতীকী আচার।</li>
+  <li><strong>সামাজিক বা রীতিনীতির ভিত্তিতে:</strong> সম্প্রদায়ভিত্তিক আচার যা সংস্কৃতি ও ঐতিহ্যকে ধরে রাখে, যেমন উৎসব বা প্রার্থনা।</li>
+</ul>
+
+<h3>উদ্দেশ্য ও প্রভাব</h3>
+<ul>
+  <li>অনেক সময় ব্ল্যাক ম্যাজিকের লক্ষ্য ছিল <em>মনস্তাত্ত্বিক প্রভাব</em>, যেমন ভয়, বিশ্বাস বা আত্মনিয়ন্ত্রণ।</li>
+  <li>প্রাচীন রীতিনীতিতে কখনো কখনো শারীরিক বা সামাজিক প্রভাবও লক্ষ্য করা যায়, তবে সরাসরি ক্ষতি খুব কমই হয়।</li>
+  <li>সিম্বল, টোটকা, মন্ত্র বা রূপকল্প ব্যবহার করে মানুষ নিজের বা অন্যের মনোভাব প্রভাবিত করার চেষ্টা করত।</li>
+</ul>
+
+<h3>সতর্কবার্তা</h3>
+<p>বাস্তব জীবনে ব্ল্যাক ম্যাজিক প্রয়োগ করা বিপজ্জনক এবং অনৈতিক। মানসিক বা শারীরিক সমস্যা থাকলে সর্বদা প্রফেশনাল সাহায্য নিন। শিক্ষামূলক উদ্দেশ্যে এটি বোঝা উচিত এবং কোনো ক্ষতিকর প্রয়োগ থেকে বিরত থাকা উচিত।</p>
+    <ul>
+      <ul>
+  <li><strong>ব্ল্যাক ম্যাজিকের সংজ্ঞা এবং ইতিহাস বোঝা:</strong> ব্ল্যাক ম্যাজিক বা কালো জাদু হলো এমন এক অনুশীলন বা আচার যা সাধারণত কারও ওপর প্রভাব বিস্তার বা নিয়ন্ত্রণ করার উদ্দেশ্যে করা হয়। প্রাচীন সভ্যতায়, যেমন মেসোপটেমিয়া, মিশর, ভারত ও ইউরোপে, এটি সামাজিক, ধর্মীয় বা রাজনৈতিক প্রভাব তৈরির জন্য ব্যবহৃত হতো।</li>
+  <li><strong>ধর্ম, সংস্কৃতি ও মনোবিজ্ঞান থেকে এর প্রভাব বিশ্লেষণ করা:</strong> বিভিন্ন ধর্ম ও সংস্কৃতিতে ব্ল্যাক ম্যাজিককে নানা রূপে দেখা যায়—ইসলামে জিন বা তাবিজ, হিন্দুতে মন্ত্র ও যজ্ঞ, খ্রিস্টান ধর্মে প্রার্থনা বা আশীর্বাদ। মনোবিজ্ঞান অনুসারে, বিশ্বাস, রিটুয়াল বা প্রতীক মানুষের মানসিক ও আবেগগত অবস্থা প্রভাবিত করতে পারে।</li>
+  <li><strong>নিরাপদ অনুশীলনের কৌশল শেখা:</strong> শিক্ষামূলক বা প্রতীকী আচার যেমন ধ্যান, আত্মউন্নয়নমূলক রিটুয়াল, গ্রাউন্ডিং বা কৃতজ্ঞতা অনুশীলন—এগুলো মানসিক স্বাস্থ্যের উন্নতি ঘটায় এবং কাউকে ক্ষতি করে না।</li>
+</ul>
+
+<h3>সংজ্ঞার উদাহরণ</h3>
+<p>লোকবিশ্বাসে টোটকা বা প্রতীকী আচার যেমন:</p>
+<ul>
+  <li>"ভাল ফলের জন্য নীল ধাতু ব্যবহার"</li>
+  <li>"নতুন বছরের প্রথম দিন একটি লাল রংয়ের মোমবাতি জ্বালানো"</li>
+  <li>"প্রতিদিন একটি উদ্দেশ্য লিখে নিজের আত্ম-নিয়ন্ত্রণ বাড়ানো"</li>
+</ul>
+<p>এগুলো মূলত <em>মানসিক প্রভাব</em> তৈরি করে, যেমন মনোযোগ বৃদ্ধি, আত্মবিশ্বাস তৈরি, বা উদ্বেগ কমানো। সরাসরি কারও ক্ষতি করার উদ্দেশ্য নেই, তাই এগুলো নিরাপদ।</p>
+
+<h3>উদ্দেশ্য ও প্রভাব</h3>
+<ul>
+  <li>মানসিক ফোকাস ও আত্ম-উন্নয়ন: নিয়মিত রুটিন ও প্রতীকী আচার ব্যক্তির আত্ম-নিয়ন্ত্রণ এবং মনোযোগ বৃদ্ধি করে।</li>
+  <li>সামাজিক সংযোগ: সম্প্রদায়ভিত্তিক আচার ও অনুষ্ঠান একাকীত্ব কমায় এবং মানসিক সমর্থন তৈরি করে।</li>
+  <li>সংস্কৃতি ও ঐতিহ্য: বিভিন্ন প্রতীক ও আচার মানুষের জীবনে ঐতিহ্য ও বিশ্বাসের ধারাবাহিকতা বজায় রাখে।</li>
+</ul>
+
+<h3>সতর্কবার্তা</h3>
+<p>বাস্তব জীবনে ব্ল্যাক ম্যাজিক প্রয়োগ বিপজ্জনক। মানসিক বা শারীরিক সমস্যা থাকলে সর্বদা প্রফেশনাল সাহায্য নিন। শিক্ষামূলক উদ্দেশ্যে বোঝা উচিত এবং কোনো ক্ষতিকর প্রয়োগ থেকে বিরত থাকা উচিত।</p>
+
+    <h3>সতর্কবার্তা</h3>
+    <p>ব্ল্যাক ম্যাজিক বা যেকোনো প্রভাব বিস্তারমূলক কৌশল বাস্তব জীবনে প্রয়োগ করা ঝুঁকিপূর্ণ। মানসিক বা শারীরিক সমস্যার ক্ষেত্রে সর্বদা প্রফেশনাল পরামর্শ নিন।</p>
+  </section>
+
+  <!-- Religions -->
+  <section id="religions" style="display:none">
+    <h2>ধর্মীয় দৃষ্টিভঙ্গি</h2>
+
+    <article style="margin-bottom:12px">
+      <article style="margin-bottom:18px">
+  <h3>ইসলামিক ধারণা</h3>
+  <p>ইসলামে জাদু ও জিন সম্পর্কিত উল্লেখ কোরআন ও হাদিসে পাওয়া যায়। এই অনুশীলন মূলত মানুষের ওপর প্রভাব বিস্তার বা ক্ষতি করার উদ্দেশ্যে হলে তা <strong>সম্পূর্ণভাবে নিষিদ্ধ (হারাম)</strong>। ইসলামী শিক্ষায় বলা হয়েছে, যে কোনো ক্ষতিকর কর্মকাণ্ড আল্লাহর আইন ও মানবিক নীতির বিরোধী।</p>
+
+  <h4>ইতিহাস ও প্রেক্ষাপট</h4>
+  <p>ইসলামিক সভ্যতায়, প্রাচীনকালে মানুষ বিভিন্ন আধ্যাত্মিক পদ্ধতি ব্যবহার করত নিজেদের সুরক্ষার জন্য। এগুলোর মধ্যে রয়েছে:</p>
+  <ul>
+    <li><strong>দোয়া ও করআয়াত পাঠ:</strong> যেমন আয়াতুল কুরসী, সূরা ফালাক ও নাস। এগুলো মানুষকে নেতিবাচক প্রভাব, খারাপ আত্মা বা দুর্বিপাক থেকে সুরক্ষা দেয়।</li>
+    <li><strong>তাবিজ ও প্রতীকী উপকরণ:</strong> স্থানীয় সম্প্রদায়ে ব্যবহৃত হয়, মূলত মানসিক শান্তি ও আত্মবিশ্বাস বাড়ানোর জন্য।</li>
+    <li><strong>রিটুয়াল ও আচার:</strong> নিয়মিত নামাজ, রোজা, জিকির ইত্যাদি মানুষের মানসিক স্থিতিশীলতা ও আত্মনিয়ন্ত্রণকে শক্তিশালী করে।</li>
+  </ul>
+
+  <h4>উদাহরণ</h4>
+  <p>একজন মুসলমান যদি নিয়মিত আয়াতুল কুরসী বা বিশেষ দোয়া পাঠ করে, তাহলে তা:</p>
+  <ul>
+    <li>দুর্বিপাক ও নেতিবাচক প্রভাব থেকে সুরক্ষা দেয়।</li>
+    <li>মানসিক চাপ এবং উদ্বেগ কমায়।</li>
+    <li>আধ্যাত্মিক স্থিতিশীলতা ও আত্মবিশ্বাস বৃদ্ধি করে।</li>
+  </ul>
+
+  <h4>সতর্কবার্তা ও নৈতিক দিক</h4>
+  <p>বাস্তব জীবনে কোনো ধরনের ক্ষতিকর ব্ল্যাক ম্যাজিক প্রয়োগ করা ইসলামে কঠোরভাবে নিষিদ্ধ। শিক্ষা উদ্দেশ্যে এর ব্যাখ্যা বোঝা যেতে পারে, তবে প্রয়োগ করা কখনও গ্রহণযোগ্য নয়।</p>
+  <div class="small" style="color:var(--danger);font-weight:700;margin-top:6px">
+    সতর্কবার্তা: ক্ষতিকর কার্যকলাপ করা হারাম ও বেআইনি হতে পারে। সর্বদা স্থানীয় ধর্মগুরুর পরামর্শ নিন। শুধুমাত্র প্রতিরক্ষামূলক বা শিক্ষামূলক আচারই গ্রহণযোগ্য।
+  </div>
+</article>
+
+ <article style="margin-bottom:18px">
+  <h3>হিন্দু ধারায়</h3>
+  <p>হিন্দু ধর্মে মন্ত্র, যজ্ঞ, পূজা এবং প্রতীকী অনুশীলন বহু শতাব্দী ধরে বিদ্যমান। এগুলো মূলত আধ্যাত্মিক উন্নতি, মানসিক স্থিতিশীলতা এবং আত্মনিয়ন্ত্রণের জন্য ব্যবহৃত হয়। লোকবিশ্বাসে টোটকা, প্রতীক বা রীতিনীতি প্রায়শই <strong>মানসিক প্রভাব</strong> সৃষ্টি করে, কারও ক্ষতি করা উদ্দেশ্য নয়।</p>
+
+  <h4>ইতিহাস ও প্রেক্ষাপট</h4>
+  <p>প্রাচীন হিন্দু সংস্কৃতিতে মন্ত্র ও যজ্ঞ মানুষের দৈনন্দিন জীবনের একটি অংশ ছিল। এর উদ্দেশ্য ছিল:</p>
+  <ul>
+    <li><strong>মানসিক ফোকাস ও ধ্যান:</strong> সূর্যোদয় বা চন্দ্রদর্শনের সময় প্রার্থনা ও ধ্যান মানসিক শান্তি বৃদ্ধি করে।</li>
+    <li><strong>প্রতীকী রূপক:</strong> প্রদীপ, ফুল, মন্ত্র ইত্যাদি মানুষকে আধ্যাত্মিকভাবে সংযুক্ত রাখে।</li>
+    <li><strong>রীতিনীতি ও পূজা:</strong> নিয়মিত পূজা ও যজ্ঞ আচার মানুষকে সংযমী ও নিয়ন্ত্রণশীল করে তোলে।</li>
+  </ul>
+
+  <h4>উদাহরণ</h4>
+  <ul>
+    <li>সূর্যোদয়ের সময় প্রার্থনা করা এবং যজ্ঞে আগুনের চারপাশে প্রদীপ জ্বালানো মানসিক ফোকাস ও একাগ্রতা বাড়ায়।</li>
+    <li>নিয়মিত মন্ত্রপাঠ মানসিক শান্তি, স্ট্রেস হ্রাস এবং আত্মনিয়ন্ত্রণে সাহায্য করে।</li>
+    <li>প্রতীকী টোটকা বা শুভ প্রতীক ব্যবহারের উদ্দেশ্য সাধারণত আত্মবিশ্বাস বৃদ্ধি করা।</li>
+  </ul>
+
+  <h4>সতর্কবার্তা ও নৈতিক দিক</h4>
+  <p>বাস্তব জীবনে কোনো ধরনের ক্ষতিকর মন্ত্র বা যজ্ঞ করা উচিত নয়। এগুলো শুধুমাত্র শিক্ষামূলক এবং ব্যক্তিগত উন্নয়নের জন্য প্রয়োগযোগ্য।</p>
+  <div class="small" style="color:var(--danger);font-weight:700;margin-top:6px">
+    সতর্কবার্তা: কোনোরূপ ক্ষতিকর মন্ত্র বা আচার করা থেকে বিরত থাকুন। প্রয়োগের আগে জ্ঞান অর্জন করুন এবং স্থানীয় পন্ডিত বা গুরুদের পরামর্শ নিন। শুধুমাত্র নিরাপদ ও নৈতিক অনুশীলন গ্রহণযোগ্য।
+  </div>
+</article>
+
+    <article style="margin-bottom:18px">
+  <h3>খ্রিস্টান ধারণা</h3>
+  <p>খ্রিস্টান সম্প্রদায়ে প্রার্থনা, আশীর্বাদ, এবং ধর্মীয় পরামর্শ প্রাচীনকাল থেকে সমস্যা সমাধান এবং মানসিক শান্তি অর্জনের জন্য ব্যবহৃত হয়ে এসেছে। এখানে কোনো ধরনের ক্ষতিকর জাদু বা নেগেটিভ প্রভাব সৃষ্টির প্রচেষ্টা স্বীকৃত নয়। এর মূল উদ্দেশ্য হলো আধ্যাত্মিক এবং মানসিক সমর্থন প্রদান করা।</p>
+
+  <h4>ইতিহাস ও প্রেক্ষাপট</h4>
+  <p>প্রাচীন খ্রিস্টান সম্প্রদায়ে বিশ্বাস করা হতো যে প্রার্থনা, পবিত্র গ্রন্থ পাঠ, আশীর্বাদ এবং ধর্মীয় আচার মানসিক শান্তি ও সুরক্ষা দেয়। এর মধ্যে রয়েছে:</p>
+  <ul>
+    <li><strong>প্রার্থনা ও আর্শীবাদ:</strong> ব্যক্তিগত বা গোষ্ঠী প্রার্থনা নেতিবাচক এনার্জি দূর করতে এবং মানসিক শান্তি বজায় রাখতে সাহায্য করে।</li>
+    <li><strong>পবিত্র বস্তু বা সিম্বল:</strong> ক্রস, পবিত্র জল, মোমবাতি ইত্যাদি প্রতীকী রূপে ব্যবহার হয়ে থাকে।</li>
+    <li><strong>ধর্মীয় অনুষ্ঠান:</strong> ক্রীস্মাস, ইস্টার বা অন্যান্য উৎসবের সময় বিশেষ প্রার্থনা ও আশীর্বাদ আচার মানুষকে আত্মিক শান্তি এবং সামাজিক সংযোগ দেয়।</li>
+  </ul>
+
+  <h4>উদাহরণ</h4>
+  <ul>
+    <li>ক্রীস্মাস বা ইস্টারের সময় প্রার্থনা ও আশীর্বাদ করা লোককে মানসিক স্থিতিশীলতা প্রদান করে।</li>
+    <li>পবিত্র জল বা ক্রসের ব্যবহার মানসিক শক্তি এবং আত্মবিশ্বাস বৃদ্ধি করতে সহায়ক।</li>
+    <li>গোষ্ঠী প্রার্থনা একাগ্রতা, সংযোগ এবং সামাজিক সমর্থন বাড়ায়।</li>
+  </ul>
+
+  <h4>সতর্কবার্তা ও নৈতিক দিক</h4>
+  <p>বাস্তব জীবনে কোনো ধরনের ক্ষতিকর ব্ল্যাক ম্যাজিক প্রয়োগ করা উচিত নয়। খ্রিস্টান প্রার্থনা ও আচার শুধুমাত্র শিক্ষামূলক, মানসিক এবং আধ্যাত্মিক সমর্থনের উদ্দেশ্যে।</p>
+  <div class="small" style="color:var(--danger);font-weight:700;margin-top:6px">
+    সতর্কবার্তা: যেকোনো আধ্যাত্মিক পরামর্শ গ্রহণের আগে স্থানীয় পাদ্রি বা আধ্যাত্মিক গাইডের পরামর্শ নিন। শিক্ষামূলক ও নিরাপদ অনুশীলনই গ্রহণযোগ্য।
+  </div>
+</article>
+  </section>
+
+<!-- Psychology -->
+<section id="psychology" style="display:none">
+  <h2>মনোবৈজ্ঞানিক ব্যাখ্যা</h2>
+  <p>ব্ল্যাক ম্যাজিক বা টোটকা সরাসরি শারীরিক ক্ষতি না করলেও, <strong>মানসিক প্রভাব</strong> অত্যন্ত শক্তিশালী হতে পারে। বিভিন্ন মনোবৈজ্ঞানিক গবেষণা এবং আচার ভিত্তিক পর্যবেক্ষণ থেকে কিছু মূল বিষয়:</p>
+  
+  <h4>১. প্লেসিবো প্রভাব (Placebo Effect)</h4>
+  <p>যখন মানুষ বিশ্বাস করে যে কোনো আচার বা টোটকা তার জন্য সুরক্ষা বা শুভ ফল প্রদান করবে, তখন তার মানসিক শান্তি, আত্মবিশ্বাস এবং সিদ্ধান্ত গ্রহণের ক্ষমতা বৃদ্ধি পায়। উদাহরণস্বরূপ:</p>
+  <ul>
+    <li>কেউ মনে করলে যে একটি টোটকা তাকে সফল করবে, সে বাস্তবে বেশি মনোযোগী এবং আত্মবিশ্বাসী হয়।</li>
+    <li>শিশু বা প্রাপ্তবয়স্করা বিশ্বাস করলে যে নির্দিষ্ট রীতিনীতি তাদের নিরাপদ রাখে, তারা কম উদ্বিগ্ন হয়।</li>
+  </ul>
+
+  <h4>২. রিটুয়াল ইফিকেসি (Ritual Efficacy)</h4>
+  <p>নিয়মিত আচার, মন্ত্রপাঠ বা ব্যক্তিগত রুটিন মানসিক শান্তি বজায় রাখতে এবং উদ্বেগ কমাতে সাহায্য করে। উদাহরণ:</p>
+  <ul>
+    <li>প্রতিদিন ধ্যান বা প্রার্থনা মানসিক চাপ কমায়।</li>
+    <li>নিয়মিত টোটকা বা প্রতীক ব্যবহার করলে নিজের নিয়ন্ত্রণ ও আত্মনিয়ন্ত্রণের অনুভূতি বাড়ে।</li>
+  </ul>
+
+  <h4>৩. সামাজিক সমর্থন (Social Support)</h4>
+  <p>গোষ্ঠীভিত্তিক আচার বা সম্মিলিত প্রার্থনা মানসিক সংযোগ এবং একাকীত্ব কমাতে সহায়ক।</p>
+  <ul>
+    <li>গ্রুপ প্রার্থনা বা অনুষ্ঠান মানুষকে সংযুক্ত রাখে এবং মানসিক সমর্থন প্রদান করে।</li>
+    <li>এই ধরনের সামাজিক আচার উদ্বেগ কমাতে এবং আত্মবিশ্বাস বাড়াতে সহায়ক।</li>
+  </ul>
+
+  <h4>৪. আত্ম-ধারণা ও প্রতীক (Self-Symbols)</h4>
+  <p>টোকেন, প্রতীক বা ব্যক্তিগত আচার মানসিক ফোকাস এবং স্মৃতি শক্তি বাড়াতে সাহায্য করে। উদাহরণ:</p>
+  <ul>
+    <li>একটি প্রতীকী টোকেন সঙ্গে রাখলে মানুষ তার লক্ষ্য বা উদ্দেশ্যে বেশি মনোযোগী হয়।</li>
+    <li>মন্ত্রপাঠ বা নিয়মিত চিহ্ন ব্যবহারে মানসিক শক্তি এবং স্থিতিশীলতা বৃদ্ধি পায়।</li>
+  </ul>
+
+  <h4>সতর্কবার্তা</h4>
+  <p>মনোবিজ্ঞান দেখায় যে এ ধরনের প্রভাব কেবল <strong>মানসিক ও প্রতীকী</strong>। বাস্তব জীবনে ক্ষতিকর বা অবৈধ কৌশল ব্যবহার করা উচিত নয়। শুধুমাত্র নৈতিক এবং শিক্ষামূলকভাবে ব্যবহার করুন।</p>
+</section>
+
+<!-- Practices -->
+<section id="practices" style="display:none">
+  <h2>নিরাপদ ও নৈতিক অনুশীলন</h2>
+  <p>এই অনুশীলনগুলো কেবল <strong>ব্যক্তিগত উন্নয়ন, মানসিক স্বাস্থ্যের স্থিতিশীলতা এবং আত্মনিয়ন্ত্রণ</strong> বৃদ্ধির জন্য। এগুলো কাউকে ক্ষতি না করে প্রয়োগ করুন। নিম্নলিখিত পদ্ধতিগুলো মানসিক শান্তি এবং ফোকাস বাড়াতে সাহায্য করে:</p>
+
+  <h4>১. দৈনিক উদ্দেশ্য নির্ধারণ (Daily Intention)</h4>
+  <p>প্রতিদিন সকালে একটি স্পষ্ট উদ্দেশ্য লিখুন। এটি আপনার মনকে ফোকাসে রাখে এবং দিনের কাজগুলো পরিকল্পিতভাবে করার শক্তি দেয়।</p>
+  <ul>
+    <li>উদাহরণ: "আজ আমি শান্ত ও সদয় থাকব।"</li>
+    <li>উপকারিতা: মানসিক স্থিতিশীলতা বৃদ্ধি এবং নেতিবাচক চিন্তা কমায়।</li>
+  </ul>
+
+  <h4>২. ধ্যান ও শ্বাসব্যায়াম (Meditation & Breathing)</h4>
+  <p>৫–১৫ মিনিটের ধ্যান বা শ্বাসব্যায়াম মানসিক চাপ হ্রাস করতে সাহায্য করে।</p>
+  <ul>
+    <li>প্রাণায়াম বা গভীর শ্বাস নেওয়া উদ্বেগ কমায়।</li>
+    <li>নিয়মিত ধ্যান ফোকাস এবং নিজেকে নিয়ন্ত্রণে রাখার ক্ষমতা বৃদ্ধি করে।</li>
+  </ul>
+
+  <h4>৩. কৃতজ্ঞতার জার্নাল (Grateful Journaling)</h4>
+  <p>দিন শেষে ৩টি কৃতজ্ঞতার বিষয় লিখুন। এটি মানসিক স্বাস্থ্যের জন্য খুব কার্যকর।</p>
+  <ul>
+    <li>উদাহরণ: পরিবার, বন্ধু বা সুস্থতার জন্য কৃতজ্ঞতা প্রকাশ।</li>
+    <li>উপকারিতা: ধনাত্মক মনোভাব বৃদ্ধি করে এবং চাপ কমায়।</li>
+  </ul>
+
+  <h4>৪. গ্রাউন্ডিং অনুশীলন (Grounding Exercise)</h4>
+  <p>মাটির সংস্পর্শে মনোযোগ দিন এবং প্রকৃতির সঙ্গে সংযোগ স্থাপন করুন। এটি বর্তমান মুহূর্তে থাকার অনুভূতি বাড়ায়।</p>
+  <ul>
+    <li>উদাহরণ: পায়ের তলায় মাটির অনুভূতি শুস্ক করুন এবং চারপাশের শব্দগুলো মনোযোগ সহকারে শুনুন।</li>
+    <li>উপকারিতা: উদ্বেগ কমায়, মানসিক শান্তি বৃদ্ধি করে।</li>
+  </ul>
+
+  <h4>৫. মানসিক স্বাস্থ্য মনিটরিং (Mental Health Check)</h4>
+  <p>যদি আপনি কোনো মানসিক সমস্যা বা উদ্বেগ অনুভব করেন, অবিলম্বে মানসিক স্বাস্থ্য বিশেষজ্ঞের সাহায্য নিন।</p>
+  <ul>
+    <li>উদাহরণ: থেরাপি, কাউন্সেলিং বা মেডিটেশন গ্রুপে অংশগ্রহণ।</li>
+    <li>উপকারিতা: পেশাদার সাহায্য দ্রুত সমাধান এবং মানসিক স্থিতিশীলতা নিশ্চিত করে।</li>
+  </ul>
+
+  <h4>সতর্কবার্তা</h4>
+  <p>এই অনুশীলনগুলো সম্পূর্ণ <strong>নিরাপদ, নৈতিক ও শিক্ষামূলক</strong> উদ্দেশ্যে। বাস্তব জীবনে কাউকে ক্ষতি করা বা অবৈধ কৌশল প্রয়োগ করা থেকে বিরত থাকুন।</p>
+</section>
+
+  <!-- Protocols -->
+<section id="protocols" style="display:none">
+  <h2>৭-দিন নিরাপদ প্রটোকল</h2>
+  <p>নিচের ধাপগুলো কেবল <strong>মানসিক শান্তি, আত্ম-উন্নয়ন এবং ফোকাস বৃদ্ধি</strong> এর জন্য। প্রতিটি ধাপকে সচেতনভাবে অনুসরণ করুন এবং কোনোরূপ ক্ষতিকর বা অবৈধ কার্যকলাপ থেকে বিরত থাকুন।</p>
+
+  <ol>
+    <li>
+      <strong>দিন ১: উদ্দেশ্য নির্ধারণ ও ধ্যান</strong><br>
+      <p>দিনের শুরুতে একটি স্পষ্ট উদ্দেশ্য লিখুন। ১০ মিনিট ধ্যান বা শ্বাসব্যায়াম করুন।</p>
+      <ul>
+        <li>উদাহরণ: "আজ আমি শান্ত ও ইতিবাচক থাকব।"</li>
+        <li>উপকারিতা: মনকে ফোকাসে রাখে এবং দিনের পরিকল্পনায় সাহায্য করে।</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>দিন ২: কৃতজ্ঞতা ও প্রাকৃতিক সংস্পর্শ</strong><br>
+      <p>কৃতজ্ঞতার তালিকা লিখুন (grateful journaling) এবং ছোট হাঁটা বা প্রকৃতির সংস্পর্শ নিন।</p>
+      <ul>
+        <li>উদাহরণ: সূর্যোদয় দেখুন, পাখির গান শুনুন।</li>
+        <li>উপকারিতা: মানসিক স্থিতিশীলতা বৃদ্ধি ও ধনাত্মক চিন্তা উন্নত করে।</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>দিন ৩: মানসিক বাধা মুক্তি</strong><br>
+      <p>নিজের ভয়, উদ্বেগ বা নেতিবাচক চিন্তা লিখুন এবং সেগুলো মুক্তির জন্য নিরাপদ অনুশীলন করুন।</p>
+      <ul>
+        <li>উদাহরণ: মানসিক চাপের বিষয়গুলো কাগজে লিখে একটি নির্দিষ্ট সময়ে বার্ন বা ড্রপ করুন (প্রতীকী)।</li>
+        <li>উপকারিতা: মানসিক চাপ হ্রাস, আত্মনিয়ন্ত্রণ বৃদ্ধি।</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>দিন ৪: সম্প্রদায় বা বন্ধুর সহায়তা</strong><br>
+      <p>বন্ধু, পরিবার বা মেন্টরের সঙ্গে কথা বলুন এবং সমর্থন নিন।</p>
+      <ul>
+        <li>উদাহরণ: আপনার লক্ষ্য ও উদ্বেগ শেয়ার করুন।</li>
+        <li>উপকারিতা: সামাজিক সংযোগ বৃদ্ধি, একাকীত্ব কমানো।</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>দিন ৫: প্রতীকী টোকেন এবং ধ্যান</strong><br>
+      <p>একটি প্রতীকী টোকেন (stone, bracelet, বা ছবি) বেছে নিন। প্রতিদিন এটি নিয়ে ৫–১০ মিনিট ধ্যান করুন।</p>
+      <ul>
+        <li>উদাহরণ: টোকেন ধরে নীরবভাবে নিজের উদ্দেশ্য স্মরণ করুন।</li>
+        <li>উপকারিতা: ফোকাস এবং মানসিক শক্তি বৃদ্ধি।</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>দিন ৬: শরীরচর্চা ও মাইন্ডফুলনেস</strong><br>
+      <p>শরীরচর্চা (হাঁটা, যোগ বা হালকা ব্যায়াম) এবং মাইন্ডফুলনেস অনুশীলন করুন।</p>
+      <ul>
+        <li>উদাহরণ: প্রতিটি শ্বাসের সঙ্গে মনোযোগ দিন, চলাফেরা এবং দেহের সংযোগ অনুভব করুন।</li>
+        <li>উপকারিতা: মানসিক ও শারীরিক শক্তি বৃদ্ধি, ফোকাস উন্নত হয়।</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>দিন ৭: রিভিউ ও পরিকল্পনা</strong><br>
+      <p>সপ্তাহের কাজগুলো রিভিউ করুন। কী পরিবর্তিত হয়েছে এবং পরবর্তী সপ্তাহের পরিকল্পনা লিখুন।</p>
+      <ul>
+        <li>উদাহরণ: কোন অনুশীলন সবচেয়ে কার্যকর মনে হলো তা নোট করুন।</li>
+        <li>উপকারিতা: আত্ম-মনিটরিং, পরিকল্পনা ও লক্ষ্য অর্জনে সহায়তা।</li>
+      </ul>
+    </li>
+  </ol>
+
+  <p class="small" style="color:var(--muted);margin-top:10px">
+    সতর্কবার্তা: এই প্রটোকল সম্পূর্ণ শিক্ষামূলক এবং নৈতিক। কোনোরূপ ক্ষতিকর কার্যকলাপ থেকে বিরত থাকুন। মানসিক বা শারীরিক সমস্যা থাকলে পেশাদারদের পরামর্শ নিন।
+  </p>
+</section>
+
+  <!-- Resources -->
+<section id="resources" style="display:none">
+  <h2>রিসোর্স ও রেফারেন্স</h2>
+  <p>এই তালিকাটি শিক্ষামূলক ও গবেষণামূলক রিসোর্সের জন্য। এখানে উল্লেখিত সব রিসোর্স <strong>নিরাপদ এবং নৈতিক</strong> অনুশীলনের জন্য প্রযোজ্য।</p>
+
+  <ul>
+    <li>
+      <strong>প্লেসিবো প্রভাব ও আচরণিক থেরাপি:</strong>
+      <p>প্লেসিবো প্রভাব এবং আচরণিক থেরাপি (Behavioral Therapy) সম্পর্কিত গবেষণা, যেমনঃ</p>
+      <ul>
+        <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6296054/" target="_blank">Placebo Effects in Psychological Interventions</a></li>
+        <li><a href="https://www.apa.org/ptsd-guideline/patients-and-families/behavioral-therapy" target="_blank">Behavioral Therapy Techniques</a></li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>ধর্মীয় ও সাংস্কৃতিক ব্যাখ্যা:</strong>
+      <p>ইসলাম, হিন্দু ও খ্রিস্টান ধর্মে আধ্যাত্মিক অনুশীলনের সংজ্ঞা ও প্রভাব:</p>
+      <ul>
+        <li>কোরআন ও হাদিসে জাদু ও দোয়ার উল্লেখ</li>
+        <li>হিন্দু ধর্মগ্রন্থে মন্ত্র ও যজ্ঞের ব্যাখ্যা</li>
+        <li>খ্রিস্টান ধর্মে প্রার্থনা ও আশীর্বাদের মানসিক প্রভাব</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>মানসিক স্বাস্থ্য ও রুটিন-থেরাপি:</strong>
+      <p>মানসিক শান্তি ও আত্ম-উন্নয়নের জন্য ব্যবহারযোগ্য রিসোর্স:</p>
+      <ul>
+        <li><a href="https://www.mindful.org/mindfulness-how-to-do-it/" target="_blank">Mindfulness Practices</a></li>
+        <li><a href="https://www.psychologytoday.com/us/basics/cognitive-behavioral-therapy" target="_blank">Cognitive Behavioral Therapy Basics</a></li>
+        <li>Gratitude Journaling এবং Daily Intention নির্ধারণের অনুশীলন</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>সুরক্ষিত ধ্যান ও মানসিক প্রশিক্ষণ অনলাইন কোর্স:</strong>
+      <ul>
+        <li><a href="https://www.coursera.org/learn/mindfulness" target="_blank">Mindfulness and Well-being Course - Coursera</a></li>
+        <li><a href="https://www.udemy.com/course/meditation-and-mindfulness/" target="_blank">Meditation & Mindfulness - Udemy</a></li>
+        <li>শান্তি ও ফোকাস বৃদ্ধির জন্য Guided Meditation Apps (Insight Timer, Calm, Headspace)</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p class="small" style="color:var(--muted);margin-top:10px">
+    সতর্কবার্তা: সব রিসোর্স শিক্ষামূলক। অনুশীলনের আগে নিজে যাচাই করুন এবং প্রয়োজনে মানসিক স্বাস্থ্য বিশেষজ্ঞ বা আধ্যাত্মিক গাইডের পরামর্শ নিন।
+  </p>
+</section>
+</main>
+
+      <footer class="app-footer">
+        <div class="copyright">Humayun Shariar Himu</div>
+        
+      </footer>
+    </main>
+  </div>
+
+  <div id="safetyModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:9999">
+    <div style="background:var(--bg-2);padding:18px;border-radius:12px;max-width:400px;width:90%;">
+      <h3>নিরাপত্তা ও ব্যবহার নির্দেশ</h3>
+      <ul class="small">
+        <li>অন্য কাউকে ক্ষতি করবেন না।</li>
+        <li>মানসিক বা শারীরিক সমস্যা থাকলে পেশাদারদের সাহায্য নিন।</li>
+        <li>ধর্মীয় আচার আগে স্থানীয় পরামর্শ নিন।</li>
+      </ul>
+      <div style="text-align:right;margin-top:12px"><button id="closeModal" class="btn btn-ghost">Close</button></div>
+    </div>
+  </div>
+
+  <script>
+    const sections=['overview','religions','psychology','practices','protocols','resources'];
+    document.querySelectorAll('.nav-button').forEach(btn=>btn.addEventListener('click',e=>{
+      document.querySelectorAll('.nav-button').forEach(b=>b.classList.remove('active'));
+      e.currentTarget.classList.add('active');
+      const view=e.currentTarget.dataset.view;
+      sections.forEach(s=>document.getElementById(s).style.display=(s===view)?'block':'none');
+      if(window.innerWidth<=480) window.scrollTo({top:0,behavior:'smooth'});
+    }));
+
+    const openSafety=document.getElementById('openSafety'),closeModal=document.getElementById('closeModal');
+    const safetyModal=document.getElementById('safetyModal');
+    openSafety.addEventListener('click',()=>{safetyModal.style.display='flex';openSafety.setAttribute('aria-expanded','true');});
+    closeModal.addEventListener('click',()=>{safetyModal.style.display='none';openSafety.setAttribute('aria-expanded','false');});
+
+    const toggleTheme=document.getElementById('toggleTheme');
+    let light=false;
+    toggleTheme.addEventListener('click',()=>{
+      light=!light;
+      if(light){
+        document.documentElement.style.setProperty('--bg-1','#e5e7eb');
+        document.documentElement.style.setProperty('--text','#111');
+        toggleTheme.textContent='Dark';
+      } else{
+        document.documentElement.style.setProperty('--bg-1','#04040a');
+        document.documentElement.style.setProperty('--text','#e8f0ff');
+        toggleTheme.textContent='Light';
+      }
+    });
+
+    document.getElementById('overview').style.display='block';
+  </script>
+</body>
+</html>
